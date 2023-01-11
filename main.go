@@ -17,6 +17,8 @@ func main() {
 	r := gin.Default()
 	r.POST("/signup", controllers.Signup)
 	r.POST("/signin", controllers.Signin)
+	//signout
+	r.POST("/signout", middlewares.RequireAuth, controllers.Signout)
 	//Auth required routes
 	r.GET("/validate", middlewares.RequireAuth, controllers.Validate)
 	r.DELETE("/user/:id", middlewares.RequireAuth, controllers.DeleteUser)

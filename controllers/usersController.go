@@ -116,16 +116,21 @@ func Signin(c *gin.Context) {
 		return 
 	}	
 
-	//respond with the generated JWT
-
-	// c.JSON(http.StatusOK, gin.H{
-	// 	"token":tokenString,
-	// })
-
 	//instead of simply returning JWT let's send it in a cookie
 	c.SetSameSite(http.SameSiteLaxMode)
 	c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
-	c.JSON(http.StatusOK, gin.H{})
+	c.JSON(http.StatusOK, gin.H{
+		"message": "signed in",
+	})
+}
+
+func Signout(c *gin.Context) {
+	println("signout")
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("Authorization", "", -1, "", "", false, true)
+	c.JSON(http.StatusOK, gin.H{
+		"message": "signed out",
+	})
 }
 
 

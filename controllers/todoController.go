@@ -10,7 +10,15 @@ import (
 func GetTodos(c *gin.Context) {
 	var todos []models.Todo
 
-	result := initializers.DB.Find(&todos)
+	// result := initializers.DB.Find(&todos)
+
+	//get logged user id
+	user, _ := c.Get("user")
+
+	userI, _ := user.(models.User)
+
+	// get only logged in user's todos
+	result := initializers.DB.Where("user_id = ?", userI.ID ).Find(&todos)
 
 	if result.Error != nil {
 		c.JSON(500, gin.H{
@@ -29,9 +37,13 @@ func CreateTodo(c *gin.Context) {
 	var body models.Todo
 
 	c.BindJSON(&body)
+
+	//get user id
+	user, _ := c.Get("user")
+	Iuser, _ := user.(models.User)
 	
 	//create post
-	todo := models.Todo{Title: body.Title, Done: false}
+	todo := models.Todo{Title: body.Title, Done: false, UserID: Iuser.ID}
 
 	result := initializers.DB.Create(&todo)
 

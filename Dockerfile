@@ -9,8 +9,8 @@ RUN go mod download
 
 COPY *.go ./
 
-RUN go build -o /go-todo-app
+RUN go build -o /go-todo
 
 EXPOSE 8080
 
-CMD ["/go-todo-app"]
+CMD ["/go-todo"]
