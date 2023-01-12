@@ -68,8 +68,16 @@ func UpdateTodo(c *gin.Context) {
 	var body models.Todo
 	c.BindJSON(&body)
 
+	//get user id
+	user, _ := c.Get("user")
+	Iuser, _ := user.(models.User)
+
 	var todo models.Todo
-	result := initializers.DB.First(&todo, id)
+	//db.Where("name = ? AND age >= ?", "jinzhu", "22").Find(&users)
+
+	// result := initializers.DB.First(&todo, id)
+
+	result := initializers.DB.Where("id = ? AND user_id = ?", id, Iuser.ID).First(&todo)
 
 	if result.Error != nil {
 		c.JSON(500, gin.H{
@@ -99,8 +107,12 @@ func UpdateTodo(c *gin.Context) {
 func DeleteTodo(c *gin.Context) {
 	id := c.Param("id")
 
+	//get user id
+	user, _ := c.Get("user")
+	Iuser, _ := user.(models.User)
+
 	var todo models.Todo
-	result := initializers.DB.First(&todo, id)
+	result := initializers.DB.Where("id = ? AND user_id = ?", id, Iuser.ID).First(&todo)
 
 	if result.Error != nil {
 		c.JSON(500, gin.H{
